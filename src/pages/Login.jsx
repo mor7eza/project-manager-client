@@ -1,19 +1,23 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Segment, Form, Header, Icon, Divider } from "semantic-ui-react";
 import { Link } from "react-router-dom";
 import { useLazyQuery } from "@apollo/react-hooks";
 
-import { USER_LOGIN_QUERY } from "../graphql/queries/user";
+import { AuthContext } from "../context/auth";
+
+import { User } from "../graphql/queries";
 
 const Login = (props) => {
+  const context = useContext(AuthContext);
+
   const [values, setValues] = useState({
     email: "",
     password: ""
   });
 
-  const [loginUser, { loading }] = useLazyQuery(USER_LOGIN_QUERY, {
+  const [loginUser, { loading }] = useLazyQuery(User.LOGIN_QUERY, {
     onCompleted({ login: { token } }) {
-      //context
+      context.login(token);
       props.history.push("/");
     },
     variables: values
