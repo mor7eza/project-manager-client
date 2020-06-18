@@ -36,7 +36,7 @@ const Login = (props) => {
     <div>
       <Segment raised className="login_form">
         <Header as="h2" icon textAlign="center">
-          <Icon name="paper plane" circular />
+          <Icon name="users" circular />
           Project Manager
           <Header.Subheader>
             Enter your credentials below to do your job
