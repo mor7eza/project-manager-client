@@ -6,7 +6,9 @@ import { AuthContext } from "../context/auth";
 import { User } from "../graphql/mutations";
 
 const Register = (props) => {
-  const { login } = useContext(AuthContext);
+  const { user_id, login } = useContext(AuthContext);
+
+  if (user_id) props.history.push("/");
 
   const [errors, setErrors] = useState(null);
 

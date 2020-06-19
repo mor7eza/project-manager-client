@@ -17,6 +17,8 @@ import { User } from "../graphql/queries";
 const Login = (props) => {
   const context = useContext(AuthContext);
 
+  if (context.user_id) props.history.push("/");
+
   const [values, setValues] = useState({
     email: "",
     password: ""
