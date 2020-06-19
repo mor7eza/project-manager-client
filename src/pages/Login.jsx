@@ -1,5 +1,12 @@
 import React, { useState, useContext } from "react";
-import { Segment, Form, Header, Icon, Divider } from "semantic-ui-react";
+import {
+  Segment,
+  Form,
+  Header,
+  Icon,
+  Divider,
+  Message
+} from "semantic-ui-react";
 import { Link } from "react-router-dom";
 import { useLazyQuery } from "@apollo/react-hooks";
 
@@ -15,10 +22,15 @@ const Login = (props) => {
     password: ""
   });
 
+  const [errors, setErrors] = useState(null);
+
   const [loginUser, { loading }] = useLazyQuery(User.LOGIN_QUERY, {
     onCompleted({ login: { token } }) {
       context.login(token);
       props.history.push("/");
+    },
+    onError(err) {
+      setErrors(err.graphQLErrors[0].extensions.errors);
     },
     variables: values
   });
@@ -44,6 +56,7 @@ const Login = (props) => {
         </Header>
         <Divider />
         <Form
+          error={errors ? 1 : 0}
           noValidate
           onSubmit={onSubmitHandler}
           className={loading ? "loading" : ""}
@@ -55,6 +68,7 @@ const Login = (props) => {
             placeholder="email..."
             type="text"
             onChange={onChangeHandler}
+            error={errors && Object.keys(errors).includes("email")}
           />
           <Form.Input
             required
@@ -63,7 +77,15 @@ const Login = (props) => {
             placeholder="password..."
             type="password"
             onChange={onChangeHandler}
+            error={errors && Object.keys(errors).includes("password")}
           />
+
+          <Message
+            error
+            header="Error!"
+            list={errors && Object.values(errors)}
+          />
+
           <Form.Button type="submit" primary fluid>
             Log in
           </Form.Button>
