@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { AuthContext } from "../context/auth";
 
 const Menubar = (props) => {
-  const { user_id, logout } = useContext(AuthContext);
+  const { user_id, fullName, logout } = useContext(AuthContext);
 
   const pathname = window.location.pathname;
   const path = pathname === "/" ? "home" : pathname.substr(1);
@@ -38,14 +38,24 @@ const Menubar = (props) => {
         />
 
         {user_id ? (
-          <Menu.Item
-            position="right"
-            label="Logout"
-            name="logout"
-            onClick={logout}
-            as={Link}
-            to="/login"
-          />
+          <Menu.Menu position="right">
+            <Menu.Item
+              name={fullName}
+              onClick={() => setActiveItem("profile")}
+              as={Link}
+              to="/profile"
+              active={activeItem === "profile"}
+            />
+            <Menu.Item
+              name="logout"
+              onClick={() => {
+                setActiveItem("login");
+                logout();
+              }}
+              as={Link}
+              to="/login"
+            />
+          </Menu.Menu>
         ) : (
           <Menu.Menu position="right">
             <Menu.Item
